@@ -9,17 +9,23 @@ signal on_heal(health : int)
 @export var max_health : int
 @export var current_health : int
 
-# TODO: Combat actions array
+@export var combat_actions : Array[CombatAction]
 
 # Gradually transition to this scale
 var target_scale : float = 1.0
 
-@onready var audio : AudioStreamPlayer = $AudioStreamPlayer2D
+@onready var audio : AudioStreamPlayer2D = $AudioStreamPlayer2D
 var take_damage_sfx : AudioStream = preload("res://Audio/take_damage.wav")
 var heal_sfx : AudioStream = preload("res://Audio/heal.wav")
 
 func begin_turn():
 	target_scale = 1.1
+	
+	if (is_player):
+		print("Player turn has begun")
+	else:
+		print("AI turn has begun")
+
 
 func end_turn():
 	target_scale = 0.9

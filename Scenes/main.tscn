@@ -1,12 +1,19 @@
 [gd_scene format=3 uid="uid://davxetbhoml2c"]
 
 [ext_resource type="Texture2D" uid="uid://cw4x70cvonwf2" path="res://Sprites/backgroundCastles.png" id="1_jjgbg"]
-[ext_resource type="Script" uid="uid://cjcy4isor6dn3" path="res://Scripts/game_manager.gd" id="1_jjvhh"]
-[ext_resource type="Script" uid="uid://cfgg4nxqxbdlw" path="res://Scripts/character.gd" id="2_8gbba"]
-[ext_resource type="Texture2D" uid="uid://c3wm7ljvlxqxc" path="res://Sprites/Dragon.png" id="2_bo1nx"]
+[ext_resource type="Script" uid="uid://c5qijjl22m22q" path="res://Scripts/game_manager.gd" id="1_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://br0gowhpqou4c" path="res://Scenes/character.tscn" id="3_8gbba"]
+[ext_resource type="Script" uid="uid://ujsdgxyqnc2d" path="res://Scripts/combat_action.gd" id="4_6bp64"]
+[ext_resource type="Resource" uid="uid://drukljduas4qj" path="res://Combat Actions/slash.tres" id="5_344ge"]
+[ext_resource type="Resource" uid="uid://bm0nyb4fewc61" path="res://Combat Actions/heavy_hit.tres" id="6_ynf5e"]
+[ext_resource type="Resource" uid="uid://du3ap4jsdmf2j" path="res://Combat Actions/heal.tres" id="7_hptm8"]
+[ext_resource type="Script" uid="uid://cxvf6rerx8blq" path="res://Scripts/combat_action_button.gd" id="8_344ge"]
+[ext_resource type="Script" uid="uid://bushgl1w4aycj" path="res://Scripts/combat_actions_ui.gd" id="8_ynf5e"]
 
-[node name="Main" type="Node2D" unique_id=1520265088]
+[node name="Main" type="Node2D" unique_id=1520265088 node_paths=PackedStringArray("player_character", "ai_character")]
 script = ExtResource("1_jjvhh")
+player_character = NodePath("Player_Character")
+ai_character = NodePath("AI_Character")
 
 [node name="Background" type="TextureRect" parent="." unique_id=864838949]
 z_index = -4096
@@ -19,11 +26,67 @@ stretch_mode = 1
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1102735822]
 
-[node name="Character" type="Node2D" parent="." unique_id=672171626]
-script = ExtResource("2_8gbba")
+[node name="CanvasLayer" type="CanvasLayer" parent="Camera2D" unique_id=565893656]
 
-[node name="Sprite" type="Sprite2D" parent="Character" unique_id=1037853153]
-texture = ExtResource("2_bo1nx")
-offset = Vector2(0, -70)
+[node name="CombatActionsUI" type="Panel" parent="Camera2D/CanvasLayer" unique_id=76058288]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -225.0
+offset_top = -155.0
+offset_right = 225.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("8_ynf5e")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Character" unique_id=1516747284]
+[node name="ButtonContainer" type="VBoxContainer" parent="Camera2D/CanvasLayer/CombatActionsUI" unique_id=1006963124]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 84.0
+grow_vertical = 2
+
+[node name="CombatActionButton" type="Button" parent="Camera2D/CanvasLayer/CombatActionsUI/ButtonContainer" unique_id=2091771636]
+layout_mode = 2
+text = "Slash"
+script = ExtResource("8_344ge")
+
+[node name="CombatActionButton2" type="Button" parent="Camera2D/CanvasLayer/CombatActionsUI/ButtonContainer" unique_id=637541160]
+layout_mode = 2
+text = "Slash"
+script = ExtResource("8_344ge")
+
+[node name="CombatActionButton3" type="Button" parent="Camera2D/CanvasLayer/CombatActionsUI/ButtonContainer" unique_id=1245422787]
+layout_mode = 2
+text = "Slash"
+script = ExtResource("8_344ge")
+
+[node name="PassTurnButton" type="Button" parent="Camera2D/CanvasLayer/CombatActionsUI/ButtonContainer" unique_id=355322255]
+layout_mode = 2
+text = "Pass Turn"
+
+[node name="DescriptionLabel" type="RichTextLabel" parent="Camera2D/CanvasLayer/CombatActionsUI" unique_id=1873022430]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -354.0
+grow_horizontal = 0
+grow_vertical = 2
+bbcode_enabled = true
+text = "Description Goes Here
+"
+
+[node name="Player_Character" parent="." unique_id=1526223406 instance=ExtResource("3_8gbba")]
+position = Vector2(-230, 0)
+is_player = true
+combat_actions = Array[ExtResource("4_6bp64")]([ExtResource("5_344ge"), ExtResource("6_ynf5e"), ExtResource("7_hptm8")])
+
+[node name="AI_Character" parent="." unique_id=218600015 instance=ExtResource("3_8gbba")]
+position = Vector2(230, 0)
+combat_actions = Array[ExtResource("4_6bp64")]([ExtResource("5_344ge"), ExtResource("6_ynf5e"), ExtResource("7_hptm8")])
+
+[connection signal="pressed" from="Camera2D/CanvasLayer/CombatActionsUI/ButtonContainer/PassTurnButton" to="Camera2D/CanvasLayer/CombatActionsUI" method="_on_pass_turn_button_pressed"]

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CombatAction" format=3 uid="uid://du3ap4jsdmf2j"]
+
+[ext_resource type="Script" uid="uid://ujsdgxyqnc2d" path="res://Scripts/combat_action.gd" id="1_f3m6k"]
+
+[resource]
+script = ExtResource("1_f3m6k")
+display_name = "Heal"
+description = "Heal 10 HP"
+heal_amount = 10
+metadata/_custom_type_script = "uid://ujsdgxyqnc2d"
